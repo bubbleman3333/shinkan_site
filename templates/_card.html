@@ -1,4 +1,4 @@
-{% macro card(b) -%}
+{% macro card(b, rank=None, note=None) -%}
 {% set st, label = b.status(today) %}
 <li class="card">
   <div class="thumb">
@@ -6,9 +6,10 @@
     {% else %}<span class="noimg">書影なし</span>{% endif %}
   </div>
   <div class="body">
-    <a class="card-title" href="{{ url(b.path) }}">{{ b.full_title }}</a>
+    {% if rank %}<span class="rank">{{ rank }}</span>{% endif %}<a class="card-title" href="{{ url(b.path) }}">{{ b.full_title }}</a>
     <div class="card-meta">
       <span class="badge {{ st }}">{{ label }}</span>
+      {% if note %}<span class="note">{{ note }}</span>{% endif %}
       <span>{{ b.pubdate|date }}</span>
       <span>{{ b.publisher }}</span>
       {% if b.genre %}<span>{{ b.genre }}</span>{% endif %}

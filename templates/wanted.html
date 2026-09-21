@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_card.html" import card %}
+{% block title %}{{ title }} | {{ site.name }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+{% block head %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","name":{{ title|tojson }},"description":{{ description|tojson }},"url":{{ canonical|tojson }},
+ "isPartOf":{"@type":"WebSite","name":{{ site.name|tojson }},"url":{{ url()|tojson }}},
+ "mainEntity":{"@type":"ItemList","numberOfItems":{{ items|length }},"itemListElement":[
+ {% for b, n in items %}{"@type":"ListItem","position":{{ loop.index }},"url":{{ url(b.path)|tojson }},"name":{{ b.full_title|tojson }}}{% if not loop.last %},{% endif %}
+ {% endfor %}]}}
+</script>
+{% endblock %}
+{% block content %}
+<nav class="crumbs"><a href="{{ url() }}">ホーム</a> › {{ title }}</nav>
+<h1>{{ title }}</h1>
+<p class="lead">{{ description }}</p>
+{% if items %}
+<ul class="cards">{% for b, n in items %}{{ card(b, rank=loop.index, note=n ~ ' 人が読みたい') }}{% endfor %}</ul>
+{% else %}
+<p>まだ票が入っていません。気になる本のページで「読みたい」を押すと、翌朝ここに反映されます。</p>
+<p><a class="button" href="{{ url('upcoming/') }}">発売予定の本を見る</a></p>
+{% endif %}
+<p class="small">票は<a href="{{ url('about/') }}">このサイト</a>の訪問者が押したものです。1 人 1 日 1 票で、同じ人が何度も押しても増えません。</p>
+{% if ads.list_bottom %}<div class="ad">{{ ads.list_bottom|safe }}</div>{% endif %}
+{% endblock %}

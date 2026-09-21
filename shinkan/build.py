@@ -40,6 +40,36 @@ def load_config(root: Path = ROOT) -> tuple[dict, dict]:
     return site, aff
 
 
+def fetch_want_ranking(api: str, limit: int = 20, timeout: float = 15, log=print) -> list[tuple[str, int]]:
+    """みんなの投稿 API（minna_api）から「読みたい」票の多い ISBN を取る。
+
+    ビルドの途中でネットに出る唯一の場所。**失敗しても生成は止めない**
+    （ランキングが空になるだけ。API を止めてもサイトは壊れない）。
+    戻り値は [(ISBN13, 票数), ...] の多い順。
+    """
+    if not api:
+        return []
+    try:
+        import requests
+
+        r = requests.get(f"{api.rstrip('/')}/v1/top",
+                         params={"site": "shinkan", "kind": "want", "limit": limit}, timeout=timeout)
+        r.raise_for_status()
+        rows = r.json()
+        if not isinstance(rows, list):
+            return []
+        out = []
+        for row in rows:
+            key = str((row or {}).get("key") or "")
+            count = int((row or {}).get("count") or 0)
+            if key and count > 0:
+                out.append((key, count))
+        return out
+    except Exception as e:  # noqa: BLE001 - API が落ちていてもビルドは通す
+        log(f"「読みたい」ランキングを取れなかったので空にした: {e}")
+        return []
+
+
 def fmt_date(d: date | None) -> str:
     if not d:
         return "発売日未定"
@@ -56,7 +86,8 @@ def yen(n: int | None) -> str:
 
 class Builder:
     def __init__(self, out_dir: Path, site_url: str, today: date | None = None, data_dir: Path | None = None,
-                 article_dir: Path = ARTICLE_DIR, root: Path = ROOT):
+                 article_dir: Path = ARTICLE_DIR, root: Path = ROOT,
+                 wanted: list[tuple[str, int]] | None = None):
         self.out = out_dir
         self.site_url = site_url.rstrip("/")
         self.today = today or today_jst()
@@ -64,6 +95,8 @@ class Builder:
         self.article_dir = article_dir
         self.root = root
         self.site, self.aff = load_config(root)
+        # 「読みたい」ランキングの元データ。渡されなければ API から取る（テストは渡して通信しない）
+        self.wanted_raw = wanted if wanted is not None else fetch_want_ranking(self.site.get("ugc_api", ""))
         self.env = Environment(loader=FileSystemLoader(root / "templates"),
                                autoescape=select_autoescape(["html", "xml"]))
         self.env.filters["yen"] = yen
@@ -164,11 +197,16 @@ class Builder:
             if rows:
                 group_index.append((name, sorted(rows, key=lambda t: -t[3])))
 
+        # 「読みたい」ランキング。手元にある本だけを、票の多い順に並べる
+        # （票が入っていても発売から時間が経って一覧から外れた本は出さない）
+        by_isbn = {b.isbn: b for b in live}
+        wanted = [(by_isbn[k], n) for k, n in self.wanted_raw if k in by_isbn]
+
         self.env.globals.update(
             genre_index=genre_index, form_index=form_index, group_index=group_index,
             pub_index=pub_index[:40], month_index=[(m, len(by_month[m])) for m in months],
             author_pages={a for a, _, _ in author_index}, publisher_pages=set(by_publisher),
-            sidebar_soon=upcoming[:6], sidebar_new=released[:6],
+            sidebar_soon=upcoming[:6], sidebar_new=released[:6], sidebar_wanted=wanted[:5],
             stats=dict(total=len(live), released=len(released), upcoming=len(upcoming),
                        this_week=len(this_week), next_week=len(next_week),
                        publishers=len(by_publisher), authors=len(by_author), archived=len(dropped),
@@ -189,8 +227,12 @@ class Builder:
 
         # ---- 一覧 ----
         self.render("index.html", "index.html", this_week=this_week[:12], next_week=next_week[:12],
-                    upcoming=upcoming[:12], released=released[:12],
+                    upcoming=upcoming[:12], released=released[:12], wanted=wanted[:10],
                     covers=[b for b in by_pub_desc if b.cover][:18])
+        if self.site.get("ugc_api"):
+            self.render("wanted.html", "wanted/index.html", title="みんなが読みたい本ランキング",
+                        description="本のページの「読みたい」ボタンで集まった票を集計したランキングです。1 人 1 日 1 票、毎朝の生成時に取り込んでいます。",
+                        items=wanted)
         self.paginate("new/", by_pub_desc, title="新刊一覧（発売日順）",
                       description=f"直近{PAST_DAYS}日に発売された本とこれから{FUTURE_DAYS}日以内に発売される本を、発売日の新しい順に並べています。")
         self.paginate("this-week/", this_week, title="今週の新刊",

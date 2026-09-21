@@ -45,6 +45,14 @@
   <ul class="cards">{% for b in released %}{{ card(b) }}{% endfor %}</ul>
   <a class="more" href="{{ url('new/') }}">新刊一覧へ（{{ stats.released }} 冊）</a>
 </section>
+{% if site.ugc_api and wanted %}
+<section>
+  <h2>みんなが読みたい本ランキング</h2>
+  <p class="lead">本のページの「読みたい」ボタンで集まった票です（1 人 1 日 1 票）。</p>
+  <ul class="cards">{% for b, n in wanted %}{{ card(b, rank=loop.index, note=n ~ ' 人が読みたい') }}{% endfor %}</ul>
+  <a class="more" href="{{ url('wanted/') }}">ランキングをすべて見る</a>
+</section>
+{% endif %}
 <section>
   <h2>ジャンルから探す</h2>
   <div class="genre-groups">
@@ -71,6 +79,7 @@
     <li>気になるジャンルの一覧（<a href="{{ url('g/') }}">ジャンル別</a>）や<a href="{{ url('form/') }}">文庫・新書・コミック</a>から絞り込めます。</li>
     <li>本のページには内容紹介・目次・書影と、Amazon・楽天ブックス・honto・紀伊國屋書店へのリンクがあります。</li>
     <li><a href="{{ url('feed.xml') }}">RSS</a> を登録しておくと、新しく追加された本を毎日受け取れます。</li>
+    {% if site.ugc_api %}<li>気になる本は「読みたい」を押すと<a href="{{ url('wanted/') }}">ランキング</a>に反映されます。読んだ本には一言レビューを書けます（匿名・登録不要）。</li>{% endif %}
   </ol>
 </section>
 {% endblock %}

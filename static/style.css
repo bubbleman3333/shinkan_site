@@ -97,6 +97,32 @@ h3 { font-size:1.05rem; margin:20px 0 8px; }
 .genre-group h3 { margin:0 0 8px; font-size:1rem; }
 .howto ol { background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:14px 16px 14px 36px; }
 
+/* ---- みんなの「読みたい」とレビュー ---- */
+.rank { display:inline-block; background:var(--brand); color:#fff; font-weight:700; font-size:.78rem; padding:0 7px; border-radius:4px; margin-right:6px; vertical-align:2px; }
+.card-meta .note { color:var(--accent); font-weight:600; }
+ol.compact.ranked { padding-left:1.4em; }
+.ugc { margin-top:20px; background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:8px 20px 20px; }
+.ugc h3 { margin-top:24px; }
+.want-box { background:var(--bg); border-radius:10px; padding:14px 16px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; }
+.want-btn { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:10px 22px; font-size:1rem; font-weight:700; cursor:pointer; font-family:inherit; }
+.want-btn:hover { filter:brightness(1.08); }
+.want-btn.voted, .want-btn:disabled { background:var(--muted); cursor:default; filter:none; }
+.want-count { font-weight:600; }
+.want-box p { flex-basis:100%; margin:0; }
+.ugc-stats { display:flex; gap:6px 14px; flex-wrap:wrap; align-items:center; font-size:.9rem; color:var(--muted); margin-bottom:10px; }
+.ugc-stars { color:#d97706; letter-spacing:1px; }
+.ugc-list { list-style:none; margin:0 0 16px; padding:0; }
+.ugc-list li { border-top:1px solid var(--line); padding:10px 0; }
+.ugc-head { display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:.85rem; }
+.ugc-head .meta { color:var(--muted); }
+.ugc-report { margin-left:auto; background:none; border:none; color:var(--muted); font-size:.75rem; cursor:pointer; font-family:inherit; }
+.ugc-list p { margin:6px 0 0; white-space:pre-wrap; }
+.ugc-form { border-top:2px solid var(--line); padding-top:12px; }
+.ugc-form .ugc-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:8px 0; }
+.ugc-form label { font-size:.85rem; color:var(--muted); display:flex; flex-direction:column; gap:4px; }
+.ugc-form select, .ugc-form input, .ugc-form textarea { padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:.95rem; font-family:inherit; color:var(--ink); background:#fff; }
+.ugc-form textarea { width:100%; box-sizing:border-box; }
+
 /* ---- 検索 ---- */
 .filter { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px 14px; background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
 .filter label { display:flex; flex-direction:column; font-size:.85rem; color:var(--muted); gap:4px; }

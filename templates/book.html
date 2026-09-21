@@ -100,6 +100,12 @@
 {% if ads.book_bottom %}<div class="ad">{{ ads.book_bottom|safe }}</div>{% endif %}
 </article>
 
+{% if site.ugc_api %}
+{# 「読みたい」ボタンと一言レビュー。中身は static/ugc.js が API から取って描く（届かなければ何も出さない） #}
+<section id="ugc" class="ugc" data-api="{{ site.ugc_api }}" data-site="shinkan" data-key="{{ b.isbn }}"></section>
+<script src="{{ url('static/ugc.js') }}" defer></script>
+{% endif %}
+
 {% if same %}
 <section>
   <h2>{% if b.genre %}「{{ b.genre }}」の{% endif %}ほかの新刊</h2>

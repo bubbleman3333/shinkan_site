@@ -30,6 +30,7 @@
       <a href="{{ url('next-week/') }}">来週発売</a>
       <a href="{{ url('upcoming/') }}">発売予定</a>
       <a href="{{ url('new/') }}">新刊一覧</a>
+      {% if site.ugc_api %}<a href="{{ url('wanted/') }}">読みたい</a>{% endif %}
       <a href="{{ url('g/') }}">ジャンル</a>
       <a href="{{ url('form/') }}">文庫・新書</a>
       <a href="{{ url('p/') }}">出版社</a>
@@ -57,6 +58,17 @@
       </ul>
       <a class="more" href="{{ url('upcoming/') }}">発売予定をもっと見る</a>
     </section>
+    {% if site.ugc_api and sidebar_wanted %}
+    <section class="box">
+      <h2>みんなが読みたい本</h2>
+      <ol class="compact ranked">
+      {% for b, n in sidebar_wanted %}
+        <li><a href="{{ url(b.path) }}">{{ b.full_title }}</a><span class="meta">{{ n }} 人が読みたい</span></li>
+      {% endfor %}
+      </ol>
+      <a class="more" href="{{ url('wanted/') }}">ランキングを見る</a>
+    </section>
+    {% endif %}
     <section class="box">
       <h2>出たばかりの本</h2>
       <ul class="compact">

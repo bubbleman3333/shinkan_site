@@ -45,6 +45,7 @@ coverage は gzip のファイルに流し込んで行単位で読み、詳細�
 | `/p/<slug>/` `/p/` | 出版社別 |
 | `/a/<slug>/` `/a/` | 著者別（2 冊以上ある人だけ） |
 | `/monthly/<年-月>/` `/monthly/` | 月ごとの新刊まとめ |
+| `/wanted/` | みんなが読みたい本ランキング（`ugc_api` を設定したときだけ） |
 | `/search/` | 書名・著者・出版社・ジャンル・形態・発売で絞り込む（`search.json` を JS で読む） |
 | `/feed.xml` `/sitemap.xml` `/robots.txt` `/404.html` `/about/` `/privacy/` | RSS・サイトマップ・固定ページ |
 
@@ -96,6 +97,24 @@ Start-Process .\.venv\Scripts\python.exe -ArgumentList "-u","-m","shinkan","fetc
 
 既定は Amazon（`/dp/<ISBN10>`）・楽天ブックス・honto・紀伊國屋書店の 4 つ。
 ISBN10 に直せない本（979 で始まるもの）では Amazon のリンクを出さない。
+
+## みんなの「読みたい」とレビュー
+
+`config/site.json` の `ugc_api` に [minna_api](https://github.com/bubbleman3333)（Cloudflare Workers + D1）の
+URL を入れると、ユーザー参加の機能が出る。**空にすると機能ごと消える**（ボタンもレビュー欄もランキングも出ない）。
+
+| 場所 | 中身 | API |
+| --- | --- | --- |
+| 本のページ | 「読みたい」ボタン（1 人 1 日 1 票）。押すと件数を表示 | `POST /v1/votes`（`kind=want`） |
+| 本のページ | 一言レビュー（おすすめ度 1〜5・任意の名前）と通報ボタン | `GET`/`POST /v1/posts`（`kind=review`）、`POST /v1/reports` |
+| トップ・`/wanted/` | みんなが読みたい本ランキング | `GET /v1/top?site=shinkan&kind=want`（**ビルド時**に取る） |
+
+- 本のページ側は `static/ugc.js` が全部やる。**API に届かなければ何も描かない**ので、
+  API を止めても静的サイトとしては壊れない。
+- ランキングだけはビルド時に取りに行く。取れなければ空のまま生成が続く
+  （`shinkan/build.py` の `fetch_want_ranking`）。票が入っている ISBN のうち、
+  手元にあって期間内の本だけを並べる。
+- 荒らし対策（回数制限・NG ワード・通報 3 件で自動非表示）は API 側にある。
 
 ## メモを足す
 

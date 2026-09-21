@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from shinkan.articles import md_to_html, text_to_html
-from shinkan.build import ROOT, Builder
+from shinkan.build import ROOT, Builder, fetch_want_ranking, load_config
 
 TODAY = date(2026, 9, 21)
 
@@ -39,20 +39,25 @@ BOOKS = [
 ]
 
 
-@pytest.fixture
-def site(tmp_path: Path) -> Path:
+def build_site(tmp_path: Path, wanted: list | None = None) -> Path:
+    """テスト用の数冊でサイトを作る。`wanted` を渡すので API へは通信しない。"""
     data = tmp_path / "books"
-    data.mkdir()
+    data.mkdir(exist_ok=True)
     for raw in BOOKS:
         (data / f"{raw['isbn']}.json").write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
     articles = tmp_path / "articles"
-    articles.mkdir()
+    articles.mkdir(exist_ok=True)
     (articles / "9784873119038.md").write_text("# 訳者のメモ\n\n**第 2 版**です。\n\n- ひとつ\n- ふたつ\n", encoding="utf-8")
     out = tmp_path / "dist"
     n = Builder(out, "https://example.com/shinkan", today=TODAY, data_dir=data,
-                article_dir=articles, root=ROOT).build()
+                article_dir=articles, root=ROOT, wanted=wanted or []).build()
     assert n == len(BOOKS)
     return out
+
+
+@pytest.fixture
+def site(tmp_path: Path) -> Path:
+    return build_site(tmp_path)
 
 
 def read(out: Path, path: str) -> str:
@@ -143,6 +148,86 @@ def test_トップに構造化データと統計が出る(site: Path):
     html = read(site, "index.html")
     assert '"@type":"WebSite"' in html and '"SearchAction"' in html
     assert "新刊ウォッチ" in html
+
+
+# ---- みんなの「読みたい」とレビュー ----
+
+def test_本のページに読みたいとレビューの欄が出る(site: Path):
+    html = read(site, "b/9784873119038/index.html")
+    assert '<section id="ugc"' in html
+    assert 'data-site="shinkan"' in html
+    assert 'data-key="9784873119038"' in html
+    assert 'data-api="https://minna-api.rakunowa.workers.dev"' in html
+    assert 'src="https://example.com/shinkan/static/ugc.js"' in html
+    assert (site / "static/ugc.js").exists()
+
+
+def test_ugc_api_が空なら機能ごと出さない(tmp_path: Path, monkeypatch):
+    site_conf, aff = load_config(ROOT)
+    site_conf = dict(site_conf, ugc_api="")
+    monkeypatch.setattr("shinkan.build.load_config", lambda root=ROOT: (site_conf, aff))
+    out = build_site(tmp_path, wanted=[("9784873119038", 7)])
+    html = read(out, "b/9784873119038/index.html")
+    assert "ugc" not in html
+    assert not (out / "wanted/index.html").exists()
+    assert "読みたい" not in read(out, "index.html")
+
+
+def test_読みたいランキングのページ(tmp_path: Path):
+    out = build_site(tmp_path, wanted=[("9784101010014", 12), ("9784873119038", 3),
+                                       ("9784088820545", 99),   # 窓の外の本は出さない
+                                       ("9780000000000", 50)])  # 手元に無い ISBN は飛ばす
+    page = read(out, "wanted/index.html")
+    assert "みんなが読みたい本ランキング" in page
+    assert "12 人が読みたい" in page and "3 人が読みたい" in page
+    assert "むかしの本" not in page and "99 人が読みたい" not in page
+    # 票の多い順に並ぶ（構造化データの中は \u エスケープされるので本文だけを見る）
+    body = page[page.index('<ul class="cards">'):]
+    assert body.index("こころ") < body.index("Real World HTTP")
+    # トップにも出る
+    top = read(out, "index.html")
+    assert "みんなが読みたい本ランキング" in top and "12 人が読みたい" in top
+    assert "/wanted/" in read(out, "sitemap.xml")
+
+
+def test_票がまだ無くてもランキングページは壊れない(site: Path):
+    page = read(site, "wanted/index.html")
+    assert "まだ票が入っていません" in page
+    assert "みんなが読みたい本ランキング" not in read(site, "index.html")
+
+
+def test_fetch_want_ranking_は失敗しても空を返す(monkeypatch):
+    assert fetch_want_ranking("") == []
+
+    def boom(*a, **kw):
+        raise OSError("つながらない")
+
+    monkeypatch.setattr("requests.get", boom)
+    assert fetch_want_ranking("https://example.com", log=lambda *a: None) == []
+
+
+def test_fetch_want_ranking(monkeypatch):
+    calls = {}
+
+    class FakeResponse:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return [{"key": "9784101010014", "count": 12}, {"key": "9784873119038", "count": 3},
+                    {"key": "", "count": 9}, {"key": "9784000000000", "count": 0}]
+
+    def fake_get(url, params=None, timeout=None):
+        calls["url"] = url
+        calls["params"] = params
+        return FakeResponse()
+
+    monkeypatch.setattr("requests.get", fake_get)
+    rows = fetch_want_ranking("https://minna-api.example/")
+    assert calls["url"] == "https://minna-api.example/v1/top"
+    assert calls["params"] == {"site": "shinkan", "kind": "want", "limit": 20}
+    # key が空のものと 0 票は落とす
+    assert rows == [("9784101010014", 12), ("9784873119038", 3)]
 
 
 # ---- 小さな Markdown 変換 ----
