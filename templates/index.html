@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% from "_card.html" import card %}
+{% block head %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":{{ site.name|tojson }},"url":{{ url()|tojson }},
+ "description":{{ site.description|tojson }},
+ "potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":{{ (url('search/') ~ '?q={search_term_string}')|tojson }}},"query-input":"required name=search_term_string"}}
+</script>
+{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>{{ site.name }}</h1>
+  <p class="lead">{{ site.description }}</p>
+  <div class="stat-row">
+    <div class="stat"><strong>{{ stats.this_week }}</strong><span>冊が今週の新刊</span></div>
+    <div class="stat"><strong>{{ stats.next_week }}</strong><span>冊が来週発売</span></div>
+    <div class="stat"><strong>{{ stats.upcoming }}</strong><span>冊が発売予定</span></div>
+    <div class="stat"><strong>{{ stats.total }}</strong><span>冊を掲載中</span></div>
+  </div>
+  {% if covers %}
+  <div class="covers">
+    {% for b in covers %}<a href="{{ url(b.path) }}" title="{{ b.full_title }}"><img src="{{ b.cover }}" alt="{{ b.full_title }}の書影" loading="lazy" width="88"></a>{% endfor %}
+  </div>
+  {% endif %}
+  <p class="hero-actions"><a class="button" href="{{ url('search/') }}">ジャンル・発売日から探す</a> <a class="button ghost" href="{{ url('feed.xml') }}">RSS で新刊を受け取る</a></p>
+</section>
+{% if ads.list_bottom %}<div class="ad">{{ ads.list_bottom|safe }}</div>{% endif %}
+<section>
+  <h2>今週の新刊</h2>
+  <ul class="cards">{% for b in this_week %}{{ card(b) }}{% endfor %}</ul>
+  <a class="more" href="{{ url('this-week/') }}">今週の新刊をすべて見る（{{ stats.this_week }} 冊）</a>
+</section>
+<section>
+  <h2>来週発売の本</h2>
+  <ul class="cards">{% for b in next_week %}{{ card(b) }}{% endfor %}</ul>
+  <a class="more" href="{{ url('next-week/') }}">来週発売の一覧へ（{{ stats.next_week }} 冊）</a>
+</section>
+<section>
+  <h2>これから発売される本</h2>
+  <ul class="cards">{% for b in upcoming %}{{ card(b) }}{% endfor %}</ul>
+  <a class="more" href="{{ url('upcoming/') }}">発売予定の一覧へ（{{ stats.upcoming }} 冊）</a>
+</section>
+<section>
+  <h2>最近出た本</h2>
+  <ul class="cards">{% for b in released %}{{ card(b) }}{% endfor %}</ul>
+  <a class="more" href="{{ url('new/') }}">新刊一覧へ（{{ stats.released }} 冊）</a>
+</section>
+<section>
+  <h2>ジャンルから探す</h2>
+  <div class="genre-groups">
+  {% for name, rows in group_index %}
+    <div class="genre-group">
+      <h3>{{ name }}</h3>
+      <div class="chips">{% for code, gname, slug, n in rows %}<a href="{{ url('g/' ~ slug ~ '/') }}">{{ gname }}<small>{{ n }}</small></a>{% endfor %}</div>
+    </div>
+  {% endfor %}
+  </div>
+  <a class="more" href="{{ url('g/') }}">ジャンル一覧へ</a>
+</section>
+<section>
+  <h2>出版社から探す</h2>
+  <div class="chips large">
+  {% for name, slug, n in pub_index[:30] %}<a href="{{ url('p/' ~ slug ~ '/') }}">{{ name }}<small>{{ n }}</small></a>{% endfor %}
+  </div>
+  <a class="more" href="{{ url('p/') }}">出版社の一覧へ（{{ stats.publishers }} 社）</a>
+</section>
+<section class="howto">
+  <h2>このサイトの使い方</h2>
+  <ol>
+    <li><a href="{{ url('this-week/') }}">今週の新刊</a>と<a href="{{ url('next-week/') }}">来週発売</a>で、いま書店に並んでいる本・これから並ぶ本がわかります。</li>
+    <li>気になるジャンルの一覧（<a href="{{ url('g/') }}">ジャンル別</a>）や<a href="{{ url('form/') }}">文庫・新書・コミック</a>から絞り込めます。</li>
+    <li>本のページには内容紹介・目次・書影と、Amazon・楽天ブックス・honto・紀伊國屋書店へのリンクがあります。</li>
+    <li><a href="{{ url('feed.xml') }}">RSS</a> を登録しておくと、新しく追加された本を毎日受け取れます。</li>
+  </ol>
+</section>
+{% endblock %}

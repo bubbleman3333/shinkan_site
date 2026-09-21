@@ -1,0 +1,20 @@
+{% macro card(b) -%}
+{% set st, label = b.status(today) %}
+<li class="card">
+  <div class="thumb">
+    {% if b.cover %}<img src="{{ b.cover }}" alt="{{ b.full_title }}の書影" loading="lazy" width="64">
+    {% else %}<span class="noimg">書影なし</span>{% endif %}
+  </div>
+  <div class="body">
+    <a class="card-title" href="{{ url(b.path) }}">{{ b.full_title }}</a>
+    <div class="card-meta">
+      <span class="badge {{ st }}">{{ label }}</span>
+      <span>{{ b.pubdate|date }}</span>
+      <span>{{ b.publisher }}</span>
+      {% if b.genre %}<span>{{ b.genre }}</span>{% endif %}
+      {% if b.price %}<span>{{ b.price|yen }}</span>{% endif %}
+    </div>
+    {% if b.contributors %}<p class="card-catch">{{ b.author_label }}</p>{% endif %}
+  </div>
+</li>
+{%- endmacro %}

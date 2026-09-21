@@ -1,0 +1,38 @@
+{
+ "_meta": {
+  "fetched_at": "20260921",
+  "first_seen": "20260921"
+ },
+ "author_line": "ニュータニックス・ジャパン合同会社／著 SBC&S株式会社／著 ダイワボウ情報システム株式会社／著 ほか",
+ "authors": [
+  {
+   "name": "ニュータニックス・ジャパン合同会社",
+   "role": "著"
+  },
+  {
+   "name": "SB C&S株式会社",
+   "role": "著"
+  },
+  {
+   "name": "ダイワボウ情報システム株式会社",
+   "role": "著"
+  },
+  {
+   "name": "株式会社ネットワールド",
+   "role": "著"
+  }
+ ],
+ "ccode": "3055",
+ "cover": "https://cover.openbd.jp/9784910313078.jpg",
+ "description": "■Nutanix Cloud Platformとは\nNutanix Cloud Platformは、仮想化基盤、ストレージ、ネットワーク、運用管理、データ保護、クラウドのサービスとの連携、Kubernetes、AI基盤までを視野に入れた、企業ITインフラのためのプラットフォームです。\n\n■本書の特長\n本書では、Nutanixを初めて学ぶエンジニアに向けて、Nutanix Cloud Platformの全体像から、AHV Virtualizationによる仮想マシン運用、ストレージとネットワークの基本、バックアップと災害対策、Prismによる日常運用、クラウドのサービスとの連携、KubernetesやAIを支える基盤としての活用までを体系的に解説します。\n既存の仮想化基盤からの移行を検討するエンジニア、Nutanix環境の設計・構築・運用に携わるエンジニア、そして今後のITインフラの選択肢を広げたい読者にとって、本書はNutanixを理解し、自身で取り組んでいくための実践的な入門書です。\n\n■目次\n第1章 Nutanixのビジョンとポートフォリオ\n第2章 NCI導入時のポイント\n第3章 NCIの設計\n第4章 NCIのインストールとセットアップ\n第5章 AHVの仮想マシン管理\n第6章 AHVへの仮想マシンの移行\n第7章 AHVにおけるSDN\n第8章 NCIのデータ保護と復旧\n第9章 Nutanix環境における運用と保守\n第10章 Nutanix環境における操作権限の委譲\n第11章 Nutanix Cloud Clusters（NC2）\n第12章 運用最適化と自動化\n第13章 ファイルストレージの統合\n第14章 さらなるビジネス加速のために\n第15章 継続的な学習と情報収集のために",
+ "isbn": "9784910313078",
+ "pages": 440,
+ "price": 3600,
+ "pubdate": "20260710",
+ "publisher": "テッキーメディア",
+ "series": "",
+ "subtitle": "変化に応えるITインフラの構築と運用",
+ "title": "Nutanix Cloud Platform実践ガイド",
+ "toc": "",
+ "volume": ""
+}

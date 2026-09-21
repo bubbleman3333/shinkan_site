@@ -1,0 +1,34 @@
+{
+ "_meta": {
+  "fetched_at": "20260921",
+  "first_seen": "20260921"
+ },
+ "author_line": "尼﨑,太樹 木山,真人 安藤,宏恵",
+ "authors": [
+  {
+   "name": "尼﨑 太樹",
+   "role": ""
+  },
+  {
+   "name": "木山 真人",
+   "role": ""
+  },
+  {
+   "name": "安藤 宏恵",
+   "role": ""
+  }
+ ],
+ "ccode": "",
+ "cover": "",
+ "description": "",
+ "isbn": "9784910558608",
+ "pages": 0,
+ "price": 4000,
+ "pubdate": "202608",
+ "publisher": "科学情報出版",
+ "series": "エンジニア入門シリーズ",
+ "subtitle": "",
+ "title": "グラフニューラルネットワーク入門 : Pythonで学ぶグラフデータ解析と機械学習モデル",
+ "toc": "",
+ "volume": ""
+}

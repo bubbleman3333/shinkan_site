@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ site.name }} | {{ site.tagline }}{% endblock %}</title>
+<meta name="description" content="{% block description %}{{ site.description }}{% endblock %}">
+{% if noindex %}<meta name="robots" content="noindex,follow">{% endif %}
+<link rel="canonical" href="{{ canonical }}">
+<link rel="alternate" type="application/rss+xml" title="{{ site.name }} 新着" href="{{ url('feed.xml') }}">
+<link rel="stylesheet" href="{{ url('static/style.css') }}">
+<link rel="icon" href="{{ url('static/favicon.svg') }}" type="image/svg+xml">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:type" content="{% block ogtype %}website{% endblock %}">
+<meta property="og:title" content="{{ self.title() }}">
+<meta property="og:description" content="{{ self.description() }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:image" content="{% block ogimage %}{{ url('static/og.png') }}{% endblock %}">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+{{ ads.head|safe }}
+{% block head %}{% endblock %}
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="{{ url() }}">{{ site.name }}</a>
+    <nav>
+      <a href="{{ url('this-week/') }}">今週の新刊</a>
+      <a href="{{ url('next-week/') }}">来週発売</a>
+      <a href="{{ url('upcoming/') }}">発売予定</a>
+      <a href="{{ url('new/') }}">新刊一覧</a>
+      <a href="{{ url('g/') }}">ジャンル</a>
+      <a href="{{ url('form/') }}">文庫・新書</a>
+      <a href="{{ url('p/') }}">出版社</a>
+      <a href="{{ url('a/') }}">著者</a>
+      <a href="{{ url('monthly/') }}">月別</a>
+    </nav>
+    <form class="search-form" action="{{ url('search/') }}" method="get" role="search">
+      <input type="search" name="q" placeholder="書名・著者・出版社で検索" aria-label="検索">
+      <button type="submit">検索</button>
+    </form>
+  </div>
+</header>
+<div class="wrap layout">
+  <main class="content">
+    {% block content %}{% endblock %}
+  </main>
+  <aside class="sidebar">
+    {% if ads.sidebar %}<div class="ad">{{ ads.sidebar|safe }}</div>{% endif %}
+    <section class="box">
+      <h2>もうすぐ発売</h2>
+      <ul class="compact">
+      {% for b in sidebar_soon %}
+        <li><a href="{{ url(b.path) }}">{{ b.full_title }}</a><span class="meta">{{ b.pubdate|date }}・{{ b.publisher }}</span></li>
+      {% endfor %}
+      </ul>
+      <a class="more" href="{{ url('upcoming/') }}">発売予定をもっと見る</a>
+    </section>
+    <section class="box">
+      <h2>出たばかりの本</h2>
+      <ul class="compact">
+      {% for b in sidebar_new %}
+        <li><a href="{{ url(b.path) }}">{{ b.full_title }}</a><span class="meta">{{ b.pubdate|date }}・{{ b.publisher }}</span></li>
+      {% endfor %}
+      </ul>
+      <a class="more" href="{{ url('new/') }}">新刊一覧へ</a>
+    </section>
+    <section class="box">
+      <h2>ジャンルから探す</h2>
+      <div class="chips">
+      {% for code, name, slug, n in genre_index[:24] %}<a href="{{ url('g/' ~ slug ~ '/') }}">{{ name }}<small>{{ n }}</small></a>{% endfor %}
+      </div>
+      <a class="more" href="{{ url('g/') }}">ジャンル一覧へ</a>
+    </section>
+    <section class="box">
+      <h2>文庫・新書・コミックから探す</h2>
+      <div class="chips">
+      {% for code, name, slug, n in form_index %}<a href="{{ url('form/' ~ slug ~ '/') }}">{{ name }}<small>{{ n }}</small></a>{% endfor %}
+      </div>
+    </section>
+    <section class="box">
+      <h2>月別の新刊まとめ</h2>
+      <ul class="compact">
+      {% for m, n in month_index %}<li><a href="{{ url('monthly/' ~ m ~ '/') }}">{{ m[:4] }}年{{ m[5:]|int }}月</a><span class="meta">{{ n }} 冊</span></li>{% endfor %}
+      </ul>
+    </section>
+  </aside>
+</div>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>書誌データは <a href="https://openbd.jp/" rel="noopener" target="_blank">openBD</a>（版元ドットコム／カーリル）の公開 API から毎朝自動で取り込んでいます（最終更新 {{ stats.updated|date }}）。内容紹介・書影は各出版社が登録したものです。発売日・価格は変更されることがあるため、購入前に書店のページでご確認ください。</p>
+    <p><a href="{{ url('about/') }}">このサイトについて</a> ・ <a href="{{ url('privacy/') }}">プライバシーポリシー</a> ・ <a href="{{ url('feed.xml') }}">RSS</a> ・ <a href="{{ url('search/') }}">新刊を探す</a> ・ 掲載 {{ stats.total }} 冊（発売予定 {{ stats.upcoming }} 冊）</p>
+    <p>© {{ today.year }} {{ site.name }}</p>
+  </div>
+</footer>
+</body>
+</html>

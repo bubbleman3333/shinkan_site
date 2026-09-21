@@ -1,0 +1,20 @@
+{
+  "_comment": "購入リンクと広告の設定。すべて空のままでもサイトは動く（素の書店リンクが出るだけ）。",
+  "_amazon_tag": "Amazon アソシエイトの ID。入れると購入リンクに ?tag= が付く。",
+  "amazon_tag": "",
+  "_rakuten_affiliate_url": "楽天アフィリエイトのリンク。{url} の部分に楽天ブックスの URL（エンコード済み）が入る。例: https://hb.afl.rakuten.co.jp/hgc/xxxxxxxx/?pc={url}",
+  "rakuten_affiliate_url": "",
+  "_stores": "購入リンクのテンプレート。{isbn13} {isbn10} {title} が使える。kind に amazon / rakuten を書くと上の設定が効く。",
+  "stores": [
+    {"name": "Amazon", "url": "https://www.amazon.co.jp/dp/{isbn10}", "kind": "amazon"},
+    {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/search?sitem={isbn13}", "kind": "rakuten"},
+    {"name": "honto", "url": "https://honto.jp/netstore/search.html?k={isbn13}", "kind": ""},
+    {"name": "紀伊國屋書店", "url": "https://www.kinokuniya.co.jp/disp/CSfDispListPage_001.jsp?qs=true&ptk=01&q={isbn13}", "kind": ""}
+  ],
+  "_ads": "広告タグの HTML をそのまま貼る。空なら何も出ない。",
+  "sidebar": "",
+  "book_top": "",
+  "book_bottom": "",
+  "list_bottom": "",
+  "head": ""
+}

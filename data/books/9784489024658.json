@@ -1,0 +1,30 @@
+{
+ "_meta": {
+  "fetched_at": "20260921",
+  "first_seen": "20260921"
+ },
+ "author_line": "藤田岳彦／著 吉田直広／著",
+ "authors": [
+  {
+   "name": "藤田岳彦",
+   "role": "著"
+  },
+  {
+   "name": "吉田直広",
+   "role": "著"
+  }
+ ],
+ "ccode": "",
+ "cover": "",
+ "description": "",
+ "isbn": "9784489024658",
+ "pages": 276,
+ "price": 3600,
+ "pubdate": "202609",
+ "publisher": "東京図書",
+ "series": "",
+ "subtitle": "中心極限定理,確率過程とその先へ",
+ "title": "確率論・統計学",
+ "toc": "",
+ "volume": ""
+}

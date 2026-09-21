@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} | {{ site.name }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+{% block head %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","name":{{ title|tojson }},"description":{{ description|tojson }},"url":{{ canonical|tojson }},
+ "isPartOf":{"@type":"WebSite","name":{{ site.name|tojson }},"url":{{ url()|tojson }}}}
+</script>
+{% endblock %}
+{% block content %}
+<nav class="crumbs"><a href="{{ url() }}">ホーム</a> › {{ title }}</nav>
+<h1>{{ title }}</h1>
+<p class="lead">{{ description }}</p>
+<p class="small">Cコードは本の裏表紙などに「C0093」の形で印刷されている 4 桁の数字です。1 桁目が対象読者、2 桁目が発行形態（文庫・新書など）、3〜4 桁目が内容の分類を表します。このページは 3〜4 桁目で分けています。openBD にCコードが登録されていない本（国立国会図書館由来の簡易な書誌など）はジャンル別のページには出ません。<a href="{{ url('new/') }}">新刊一覧</a>や<a href="{{ url('search/') }}">検索</a>からは探せます。</p>
+<div class="genre-groups">
+{% for name, rows in group_index %}
+  <div class="genre-group">
+    <h3>{{ name }}</h3>
+    <div class="chips">{% for code, gname, slug, n in rows %}<a href="{{ url('g/' ~ slug ~ '/') }}">{{ gname }}<small>{{ n }}</small></a>{% endfor %}</div>
+  </div>
+{% endfor %}
+</div>
+<h2>冊数の多い順</h2>
+<table class="facts">
+<tr><th>ジャンル</th><th>Cコード</th><th>冊数</th></tr>
+{% for code, name, slug, n in genre_index %}
+<tr><td><a href="{{ url('g/' ~ slug ~ '/') }}">{{ name }}</a></td><td>C**{{ code }}</td><td>{{ n }}</td></tr>
+{% endfor %}
+</table>
+<h2>対象読者の区分（Cコード 1 桁目）</h2>
+<table class="facts">
+<tr><th>コード</th><th>意味</th></tr>
+{% for code, name in AUDIENCES.items() %}<tr><td>C{{ code }}***</td><td>{{ name }}</td></tr>{% endfor %}
+</table>
+{% endblock %}

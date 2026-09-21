@@ -1,0 +1,30 @@
+{
+ "_meta": {
+  "fetched_at": "20260921",
+  "first_seen": "20260921"
+ },
+ "author_line": "滝澤成人／著 酒井雅裕／監修",
+ "authors": [
+  {
+   "name": "滝澤成人",
+   "role": "著"
+  },
+  {
+   "name": "酒井雅裕",
+   "role": "監修"
+  }
+ ],
+ "ccode": "",
+ "cover": "",
+ "description": "",
+ "isbn": "9784877838607",
+ "pages": 143,
+ "price": 1200,
+ "pubdate": "202607",
+ "publisher": "カットシステム",
+ "series": "情報演習 73",
+ "subtitle": "ステップ30 ルビ付き",
+ "title": "留学生のためのPython<基礎編>ワークブック",
+ "toc": "",
+ "volume": ""
+}

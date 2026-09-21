@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% from "_card.html" import card %}
+{% set st, label = b.status(today) %}
+{% block title %}{{ b.full_title }}（{{ b.publisher }}）{% if b.pubdate %} {{ b.pubdate.year }}年{{ b.pubdate.month }}月{{ b.pubdate.day }}日発売{% endif %} | {{ site.name }}{% endblock %}
+{% block description %}{{ b.full_title }}{% if b.contributors %}（{{ b.author_label }}）{% endif %}は{{ b.publisher }}から{{ b.pubdate|date }}に発売{% if st == 'upcoming' %}予定{% endif %}の本です。{{ b.summary_text(90) }}{% endblock %}
+{% block ogtype %}book{% endblock %}
+{% block ogimage %}{{ b.cover if b.cover else url('static/og.png') }}{% endblock %}
+{% block head %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Book","name":{{ b.full_title|tojson }},"url":{{ canonical|tojson }},
+ "isbn":{{ b.isbn|tojson }},"bookFormat":"https://schema.org/Paperback",
+ {% if b.cover %}"image":{{ b.cover|tojson }},{% endif %}
+ {% if b.contributors %}"author":[{% for c in b.contributors %}{"@type":"Person","name":{{ c.name|tojson }}}{% if not loop.last %},{% endif %}{% endfor %}],{% endif %}
+ {% if b.pubdate %}"datePublished":{{ b.pubdate.isoformat()|tojson }},{% endif %}
+ {% if b.pages %}"numberOfPages":{{ b.pages }},{% endif %}
+ {% if b.genre %}"genre":{{ b.genre|tojson }},{% endif %}
+ {% if b.description %}"description":{{ b.summary_text(300)|tojson }},{% endif %}
+ "inLanguage":"ja","publisher":{"@type":"Organization","name":{{ b.publisher|tojson }}}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+ {"@type":"ListItem","position":1,"name":"ホーム","item":{{ url()|tojson }}},
+ {"@type":"ListItem","position":2,"name":"ジャンル別","item":{{ url('g/')|tojson }}}
+ {%- if b.genre %},{"@type":"ListItem","position":3,"name":{{ b.genre|tojson }},"item":{{ url('g/' ~ b.genre_slug ~ '/')|tojson }}}{% endif %},
+ {"@type":"ListItem","position":{{ 4 if b.genre else 3 }},"name":{{ b.full_title|tojson }},"item":{{ canonical|tojson }}}]}
+</script>
+{% endblock %}
+{% block content %}
+<article>
+<nav class="crumbs"><a href="{{ url() }}">ホーム</a> › <a href="{{ url('g/') }}">ジャンル別</a>{% if b.genre %} › <a href="{{ url('g/' ~ b.genre_slug ~ '/') }}">{{ b.genre }}</a>{% endif %} › {{ b.full_title }}</nav>
+
+<div class="book-head">
+  <div class="book-cover">
+    {% if b.cover %}<img src="{{ b.cover }}" alt="{{ b.full_title }}の書影" width="180">
+    {% else %}<span class="noimg">書影はありません</span>{% endif %}
+  </div>
+  <div class="book-main">
+    <h1>{{ b.full_title }}</h1>
+    <p class="meta-line"><span class="badge {{ st }}">{{ label }}</span> {{ b.pubdate|date }}発売{% if b.series %} ・ シリーズ「<a href="{{ url('search/') }}?q={{ b.series|urlencode }}">{{ b.series }}</a>」{% endif %}</p>
+    {% if b.contributors %}
+    <p>{% for c in b.contributors %}{% if c.name in author_pages %}<a href="{{ url('a/' ~ b.author_slug(c.name) ~ '/') }}">{{ c.name }}</a>{% else %}{{ c.name }}{% endif %}{% if c.role %}（{{ c.role }}）{% endif %}{% if not loop.last %} ・ {% endif %}{% endfor %}</p>
+    {% endif %}
+    <p class="lead">{{ b.summary_text(160) }}</p>
+    <div class="buy">
+      {% for l in links %}<a class="button{% if not loop.first %} ghost{% endif %}" href="{{ l.url }}" rel="nofollow noopener sponsored" target="_blank">{{ l.name }}で見る</a>{% endfor %}
+    </div>
+    <p class="small">書店へのリンクです。在庫や価格は各サイトでご確認ください。</p>
+  </div>
+</div>
+{% if ads.book_top %}<div class="ad">{{ ads.book_top|safe }}</div>{% endif %}
+
+<table class="facts">
+  <tr><th>書名</th><td>{{ b.title }}{% if b.subtitle %}<br>{{ b.subtitle }}{% endif %}</td></tr>
+  {% if b.series %}<tr><th>シリーズ</th><td>{{ b.series }}{% if b.volume %} {{ b.volume }}{% endif %}</td></tr>{% endif %}
+  <tr><th>著者</th><td>{% if b.contributors %}{{ b.author_label }}{% else %}記載なし{% endif %}</td></tr>
+  <tr><th>出版社</th><td>{% if b.publisher in publisher_pages %}<a href="{{ url('p/' ~ b.publisher_slug ~ '/') }}">{{ b.publisher }}</a>{% else %}{{ b.publisher }}{% endif %}</td></tr>
+  <tr><th>発売日</th><td>{{ b.pubdate|date }}{% if st == 'upcoming' %}（発売予定）{% endif %}</td></tr>
+  <tr><th>価格</th><td>{{ b.price|yen }}{% if b.price %}（税抜・登録時点）{% endif %}</td></tr>
+  {% if b.pages %}<tr><th>ページ数</th><td>{{ b.pages }} ページ</td></tr>{% endif %}
+  <tr><th>ISBN</th><td>{{ b.isbn }}{% if b.isbn10 %} / {{ b.isbn10 }}（ISBN10）{% endif %}</td></tr>
+  {% if b.ccode %}
+  <tr><th>Cコード</th><td>C{{ b.ccode }}</td></tr>
+  <tr><th>ジャンル</th><td>{% if b.genre %}<a href="{{ url('g/' ~ b.genre_slug ~ '/') }}">{{ b.genre }}</a>{% else %}分類なし{% endif %}{% if b.genre_group %}（{{ b.genre_group }}）{% endif %}</td></tr>
+  <tr><th>対象読者</th><td>{{ b.audience or '記載なし' }}</td></tr>
+  <tr><th>形態</th><td>{% if b.form %}<a href="{{ url('form/' ~ b.form_slug ~ '/') }}">{{ b.form }}</a>{% else %}記載なし{% endif %}</td></tr>
+  {% endif %}
+</table>
+
+{% if desc_html %}
+<section class="official">
+  <h2>内容紹介</h2>
+  <div class="official-body">{{ desc_html|safe }}</div>
+  <p class="source">出典: openBD / {{ b.publisher }}（{{ (b.fetched_at or today)|date }} 取得）</p>
+</section>
+{% endif %}
+
+{% if toc_html %}
+<section class="official">
+  <h2>目次</h2>
+  <div class="official-body">{{ toc_html|safe }}</div>
+  <p class="source">出典: openBD / {{ b.publisher }}</p>
+</section>
+{% endif %}
+
+{% if art.written %}
+<div class="article-body">
+  <p class="byline">編集部のメモ</p>
+  {% if art.title %}<h2>{{ art.title }}</h2>{% endif %}
+  {{ art.body_html|safe }}
+</div>
+{% endif %}
+
+<section class="official">
+  <h2>この本を買う</h2>
+  <div class="buy">
+    {% for l in links %}<a class="button{% if not loop.first %} ghost{% endif %}" href="{{ l.url }}" rel="nofollow noopener sponsored" target="_blank">{{ l.name }}</a>{% endfor %}
+  </div>
+  <p class="source">ISBN {{ b.isbn }} で各書店を検索するリンクです。</p>
+</section>
+{% if ads.book_bottom %}<div class="ad">{{ ads.book_bottom|safe }}</div>{% endif %}
+</article>
+
+{% if same %}
+<section>
+  <h2>{% if b.genre %}「{{ b.genre }}」の{% endif %}ほかの新刊</h2>
+  <ul class="cards">{% for r in same %}{{ card(r) }}{% endfor %}</ul>
+  {% if b.genre %}<a class="more" href="{{ url('g/' ~ b.genre_slug ~ '/') }}">{{ b.genre }}の新刊をすべて見る</a>{% endif %}
+</section>
+{% endif %}
+{% endblock %}

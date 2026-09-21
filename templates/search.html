@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} | {{ site.name }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+{% block content %}
+<nav class="crumbs"><a href="{{ url() }}">ホーム</a> › {{ title }}</nav>
+<h1>{{ title }}</h1>
+<p class="lead">{{ description }} 条件を変えるとその場で結果が変わります。</p>
+<form id="f" class="filter" onsubmit="return false">
+  <label class="grow">キーワード（書名・著者・出版社）
+    <input type="search" name="q" placeholder="例: 村上春樹、ちくま新書、料理">
+  </label>
+  <label>ジャンル
+    <select name="g"><option value="">すべて</option>{% for code, name, slug, n in genre_index %}<option value="{{ name }}">{{ name }}（{{ n }}）</option>{% endfor %}</select>
+  </label>
+  <label>形態
+    <select name="fm"><option value="">すべて</option>{% for code, name, slug, n in form_index %}<option value="{{ name }}">{{ name }}（{{ n }}）</option>{% endfor %}</select>
+  </label>
+  <label>発売
+    <select name="s"><option value="">すべて</option><option value="upcoming">これから発売</option><option value="released">発売済み</option></select>
+  </label>
+  <label>並び順
+    <select name="sort"><option value="new">発売日が新しい順</option><option value="soon">発売日が近い順</option><option value="title">書名順</option></select>
+  </label>
+</form>
+<p id="count" class="lead">読み込み中…</p>
+<ul id="results" class="cards"></ul>
+<p id="more-wrap"><button id="more" class="button ghost" type="button">さらに表示</button></p>
+<script>
+(function () {
+  // ページからの相対パスにしておくと、ローカル確認でも公開先でも同じオリジンで読める
+  var DATA_URL = '../search.json';
+  var BASE = '../b/';
+  var form = document.getElementById('f');
+  var list = document.getElementById('results');
+  var countEl = document.getElementById('count');
+  var moreBtn = document.getElementById('more');
+  var rows = [], shown = 0, filtered = [];
+  var PAGE = 48;
+  var TODAY = new Date(); TODAY.setHours(0, 0, 0, 0);
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function daysUntil(d) {
+    if (!d) return null;
+    return Math.round((new Date(d + 'T00:00:00+09:00') - TODAY) / 86400000);
+  }
+  function label(r) {
+    var n = daysUntil(r.d);
+    if (n === null) return ['released', '発売日不明'];
+    if (n > 7) return ['upcoming', '発売予定'];
+    if (n > 0) return ['soon', 'あと' + n + '日で発売'];
+    if (n === 0) return ['soon', '本日発売'];
+    if (n >= -7) return ['released', '今週の新刊'];
+    return ['released', '発売中'];
+  }
+  function card(r) {
+    var st = label(r);
+    var thumb = r.c ? '<img src="https://cover.openbd.jp/' + esc(r.i) + '.jpg" alt="" loading="lazy" width="64">'
+                    : '<span class="noimg">書影なし</span>';
+    var bits = ['<span class="badge ' + st[0] + '">' + st[1] + '</span>',
+                '<span>' + esc(r.d ? r.d.replace(/-/g, '/') : '発売日未定') + '</span>',
+                '<span>' + esc(r.p) + '</span>'];
+    if (r.g) bits.push('<span>' + esc(r.g) + '</span>');
+    if (r.y) bits.push('<span>' + r.y.toLocaleString() + '円</span>');
+    return '<li class="card"><div class="thumb">' + thumb + '</div><div class="body">' +
+      '<a class="card-title" href="' + BASE + esc(r.i) + '/">' + esc(r.t) + '</a>' +
+      '<div class="card-meta">' + bits.join('') + '</div>' +
+      (r.a && r.a.length ? '<p class="card-catch">' + esc(r.a.join('・')) + '</p>' : '') +
+      '</div></li>';
+  }
+  function apply() {
+    var v = {};
+    Array.prototype.forEach.call(form.elements, function (el) { if (el.name) v[el.name] = el.value.trim(); });
+    var q = v.q.toLowerCase();
+    filtered = rows.filter(function (r) {
+      if (v.g && r.g !== v.g) return false;
+      if (v.fm && r.f !== v.fm) return false;
+      if (v.s) {
+        var n = daysUntil(r.d);
+        if (v.s === 'upcoming' && !(n > 0)) return false;
+        if (v.s === 'released' && !(n <= 0)) return false;
+      }
+      if (q && (r.t + ' ' + (r.a || []).join(' ') + ' ' + r.p + ' ' + (r.g || '')).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+    if (v.sort === 'title') filtered.sort(function (a, b) { return a.t < b.t ? -1 : 1; });
+    else if (v.sort === 'soon') filtered.sort(function (a, b) { return (a.d || '9999') < (b.d || '9999') ? -1 : 1; });
+    else filtered.sort(function (a, b) { return (a.d || '') > (b.d || '') ? -1 : 1; });
+    list.innerHTML = ''; shown = 0; showMore();
+    var p = new URLSearchParams();
+    Object.keys(v).forEach(function (k) { if (v[k] && !(k === 'sort' && v[k] === 'new')) p.set(k, v[k]); });
+    history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p.toString() : ''));
+  }
+  function showMore() {
+    var chunk = filtered.slice(shown, shown + PAGE);
+    list.insertAdjacentHTML('beforeend', chunk.map(card).join(''));
+    shown += chunk.length;
+    countEl.textContent = filtered.length + ' 冊が該当（' + shown + ' 冊を表示）';
+    moreBtn.style.display = shown < filtered.length ? '' : 'none';
+  }
+  moreBtn.addEventListener('click', showMore);
+  form.addEventListener('input', apply);
+  form.addEventListener('change', apply);
+  fetch(DATA_URL).then(function (r) { return r.json(); }).then(function (data) {
+    rows = data;
+    var p = new URLSearchParams(location.search);
+    Array.prototype.forEach.call(form.elements, function (el) { if (el.name && p.has(el.name)) el.value = p.get(el.name); });
+    apply();
+  }).catch(function () { countEl.textContent = 'データを読み込めませんでした。'; });
+})();
+</script>
+{% endblock %}

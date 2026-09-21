@@ -1,0 +1,117 @@
+:root { --ink:#1e2b25; --muted:#5f7068; --line:#e1e8e3; --bg:#f6f8f6; --paper:#fff; --brand:#1c5c45; --brand-dark:#12402f; --accent:#b45309; --ok:#1b7f4b; --soon:#c2410c; --up:#5b21b6; }
+* { box-sizing: border-box; }
+html { font-size: 16px; }
+body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif; color:var(--ink); background:var(--bg); line-height:1.75; }
+img { max-width:100%; height:auto; }
+a { color:var(--brand); }
+a:hover { color:var(--brand-dark); }
+.wrap { max-width:1140px; margin:0 auto; padding:0 16px; }
+.site-header { background:var(--paper); border-bottom:1px solid var(--line); }
+.site-header .wrap { display:flex; align-items:center; gap:20px; flex-wrap:wrap; padding-top:12px; padding-bottom:12px; }
+.brand { font-weight:700; font-size:1.25rem; text-decoration:none; color:var(--brand); }
+.site-header nav { display:flex; gap:4px; flex-wrap:wrap; }
+.site-header nav a { text-decoration:none; padding:6px 10px; border-radius:6px; color:var(--ink); font-size:.95rem; }
+.site-header nav a:hover { background:var(--bg); }
+.layout { display:grid; grid-template-columns: minmax(0,1fr) 296px; gap:28px; padding-top:24px; padding-bottom:40px; }
+.content { min-width:0; }
+.sidebar .box { background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:18px; }
+.sidebar h2 { font-size:1rem; margin:0 0 8px; padding:0; border:none; }
+h1 { font-size:1.55rem; line-height:1.4; margin:8px 0 12px; }
+h2 { font-size:1.2rem; margin:32px 0 12px; padding-left:10px; border-left:4px solid var(--brand); }
+h3 { font-size:1.05rem; margin:20px 0 8px; }
+.lead { color:var(--muted); }
+.meta-line { color:var(--muted); font-size:.9rem; }
+.crumbs { font-size:.85rem; color:var(--muted); }
+.small { font-size:.85rem; color:var(--muted); }
+
+/* ---- 一覧（書影つきカード） ---- */
+.cards { list-style:none; margin:0; padding:0; display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); }
+.card { background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:12px 14px; display:flex; gap:12px; }
+.card .thumb { flex:0 0 64px; width:64px; }
+.card .thumb img { width:64px; border-radius:3px; box-shadow:0 1px 4px rgba(0,0,0,.18); background:var(--bg); display:block; }
+.card .thumb .noimg { width:64px; height:92px; border-radius:3px; background:linear-gradient(135deg,#dfe7e2,#eef2ef); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:.65rem; text-align:center; padding:4px; }
+.card .body { min-width:0; flex:1; }
+.card-title { font-weight:600; text-decoration:none; display:block; line-height:1.45; }
+.card-meta { display:flex; flex-wrap:wrap; gap:2px 10px; font-size:.8rem; color:var(--muted); margin-top:5px; }
+.card-catch { margin:5px 0 0; font-size:.82rem; color:var(--muted); }
+.badge { display:inline-block; font-size:.72rem; padding:1px 8px; border-radius:999px; color:#fff; background:var(--muted); }
+.badge.released { background:var(--ok); }
+.badge.soon { background:var(--soon); }
+.badge.upcoming { background:var(--up); }
+
+/* ---- 表紙の帯 ---- */
+.covers { display:flex; gap:10px; overflow-x:auto; padding:4px 0 10px; }
+.covers a { flex:0 0 88px; text-decoration:none; }
+.covers img { width:88px; border-radius:3px; box-shadow:0 1px 5px rgba(0,0,0,.2); }
+
+.compact { list-style:none; margin:0; padding:0; }
+.compact li { padding:6px 0; border-bottom:1px solid var(--line); font-size:.9rem; }
+.compact li:last-child { border-bottom:none; }
+.compact .meta { display:block; font-size:.8rem; color:var(--muted); }
+.chips { display:flex; flex-wrap:wrap; gap:6px; }
+.chips a { text-decoration:none; font-size:.85rem; background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:3px 10px; color:var(--ink); }
+.chips.large a { background:var(--paper); padding:6px 12px; font-size:.95rem; }
+.chips small { color:var(--muted); margin-left:4px; }
+.more { display:inline-block; margin-top:10px; font-size:.9rem; }
+
+/* ---- 本のページ ---- */
+.book-head { display:flex; gap:22px; flex-wrap:wrap; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:20px 22px; }
+.book-cover { flex:0 0 180px; }
+.book-cover img { width:180px; border-radius:4px; box-shadow:0 2px 10px rgba(0,0,0,.22); }
+.book-cover .noimg { width:180px; height:255px; border-radius:4px; background:linear-gradient(135deg,#dfe7e2,#eef2ef); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:.8rem; }
+.book-main { flex:1; min-width:260px; }
+.book-main h1 { margin-top:0; }
+.facts { width:100%; border-collapse:collapse; background:var(--paper); border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:16px 0; }
+.facts th, .facts td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+.facts th { width:8em; background:var(--bg); font-weight:600; white-space:nowrap; }
+.facts tr:last-child th, .facts tr:last-child td { border-bottom:none; }
+.buy { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 4px; }
+.button { display:inline-block; background:var(--brand); color:#fff !important; text-decoration:none; padding:10px 18px; border-radius:8px; font-weight:600; }
+.button:hover { background:var(--brand-dark); }
+.button.ghost { background:var(--paper); color:var(--brand) !important; border:1px solid var(--brand); }
+.button.ghost:hover { background:var(--bg); }
+.article-body, .official { background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:8px 20px 20px; margin-top:20px; }
+.official h2 { margin-top:16px; }
+.official-body p { margin:.6em 0; }
+.source { font-size:.8rem; color:var(--muted); }
+.byline { font-size:.8rem; color:var(--muted); margin:12px 0 0; }
+.pager { display:flex; gap:6px; flex-wrap:wrap; margin:20px 0; }
+.pager a, .pager .cur { padding:6px 12px; border:1px solid var(--line); border-radius:6px; text-decoration:none; background:var(--paper); }
+.pager .cur { background:var(--brand); color:#fff; border-color:var(--brand); }
+.ad { margin:16px 0; text-align:center; }
+.site-footer { border-top:1px solid var(--line); background:var(--paper); font-size:.85rem; color:var(--muted); padding:24px 0; }
+
+/* ---- トップ ---- */
+.search-form { display:flex; gap:6px; margin-left:auto; }
+.search-form input { padding:6px 10px; border:1px solid var(--line); border-radius:6px; min-width:200px; font-size:.9rem; }
+.search-form button { padding:6px 12px; border:none; border-radius:6px; background:var(--brand); color:#fff; cursor:pointer; }
+.hero { background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:20px 24px; }
+.hero h1 { margin-top:0; font-size:1.8rem; }
+.stat-row { display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin:16px 0; }
+.stat { background:var(--bg); border-radius:10px; padding:12px; text-align:center; }
+.stat strong { display:block; font-size:1.7rem; color:var(--brand); line-height:1.2; }
+.stat span { font-size:.8rem; color:var(--muted); }
+.hero-actions { display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 0; }
+.genre-groups { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:14px; }
+.genre-group { background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:12px 16px; }
+.genre-group h3 { margin:0 0 8px; font-size:1rem; }
+.howto ol { background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:14px 16px 14px 36px; }
+
+/* ---- 検索 ---- */
+.filter { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px 14px; background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+.filter label { display:flex; flex-direction:column; font-size:.85rem; color:var(--muted); gap:4px; }
+.filter label.grow { grid-column: span 2; }
+.filter select, .filter input { padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:.95rem; color:var(--ink); background:#fff; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .facts th { width:6.5em; }
+  h1 { font-size:1.3rem; }
+  .stat-row { grid-template-columns:repeat(2, 1fr); }
+  .filter { grid-template-columns:1fr; }
+  .filter label.grow { grid-column: span 1; }
+  .search-form { width:100%; margin-left:0; }
+  .search-form input { flex:1; min-width:0; }
+  .book-cover, .book-cover img, .book-cover .noimg { flex-basis:132px; width:132px; }
+  .book-cover .noimg { height:188px; }
+}

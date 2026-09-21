@@ -1,0 +1,11 @@
+.venv/
+dist/
+__pycache__/
+.pytest_cache/
+*.pyc
+fetch.log
+fetch.err.log
+serve.log
+serve.err.log
+data/coverage.new*
+data/*.tmp.gz
