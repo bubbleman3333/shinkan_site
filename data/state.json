@@ -2,5 +2,8 @@
  "phase": "ready",
  "done": 1938034,
  "kept": 5242,
- "total": 1938034
+ "total": 1938035,
+ "last_added": 1,
+ "last_kept": 607,
+ "updated": "20260922"
 }
