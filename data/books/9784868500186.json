@@ -1,9 +1,9 @@
 {
  "_meta": {
-  "fetched_at": "20260926",
+  "fetched_at": "20260927",
   "first_seen": "20260921"
  },
- "author_line": "葛藤安／著 川崎昌平／編集",
+ "author_line": "葛藤安／著 川崎昌平／著・編集",
  "authors": [
   {
    "name": "葛藤 安",
@@ -11,7 +11,7 @@
   },
   {
    "name": "川崎 昌平",
-   "role": "編"
+   "role": "著"
   }
  ],
  "ccode": "0095",
