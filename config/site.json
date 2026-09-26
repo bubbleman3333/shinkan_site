@@ -2,7 +2,7 @@
   "name": "新刊ウォッチ",
   "tagline": "発売したばかりの本とこれから出る本を毎日自動で更新",
   "description": "直近 90 日に発売された本と、これから 60 日以内に発売される本を、ジャンル・出版社・著者ごとに整理して毎朝自動で更新しています。データは openBD（版元ドットコム・カーリル）の公開 API を元にしています。",
-  "site_url": "https://bubbleman3333.github.io/shinkan_site",
+  "site_url": "https://shinkan-watch.rakunowa.workers.dev",
   "author": "新刊ウォッチ編集部",
   "_ugc_api": "みんなの投稿 API（minna_api）。空にすると「読みたい」ボタンもレビュー欄もランキングも出なくなる。",
   "ugc_api": "https://minna-api.rakunowa.workers.dev"

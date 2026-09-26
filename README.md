@@ -3,7 +3,7 @@
 発売したばかりの本とこれから出る本を、openBD の公開 API から毎日取り込み、静的サイトとして
 GitHub Pages に配信する。**運用費ゼロ**（API はキー不要、GitHub Actions と Pages は無料枠）。
 
-- 公開先: https://bubbleman3333.github.io/shinkan_site/
+- 公開先: https://shinkan-watch.rakunowa.workers.dev/
 - 対象は**発売日が「直近 90 日 〜 これから 60 日」**の本。期間から外れた本は一覧から消えるが、
   ページは残す（リンク切れを作らないため）。
 - 内容紹介・目次・書影は出版社が openBD に登録した公式データをそのまま出す（出典を明示）。
