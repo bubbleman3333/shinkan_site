@@ -1,0 +1,30 @@
+{
+ "_meta": {
+  "fetched_at": "20260929",
+  "first_seen": "20260929"
+ },
+ "author_line": "河口真一郎／著 河口和範／著",
+ "authors": [
+  {
+   "name": "河口 真一郎",
+   "role": "著"
+  },
+  {
+   "name": "河口 和範",
+   "role": "著"
+  }
+ ],
+ "ccode": "3030",
+ "cover": "https://cover.openbd.jp/9784867822555.jpg",
+ "description": "本書の目的は、ミクロ的基礎を解明し、新興国企業がVUCA およびDX 環境において持続的な競争優位性を構築する為の実装可能なモデル、および実行フレームワークを提示することにある。組織を単なる構造ではなく、3 層からなる有機的なダイナミック・システム「RADMS（Resilient & Well Aligned Dynamic Management System）」として再定義した。",
+ "isbn": "9784867822555",
+ "pages": 184,
+ "price": 2800,
+ "pubdate": "20261013",
+ "publisher": "鳥影社",
+ "series": "",
+ "subtitle": "",
+ "title": "VUCA・DX時代の組織変革戦略",
+ "toc": "",
+ "volume": ""
+}
