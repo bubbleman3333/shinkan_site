@@ -1,15 +1,20 @@
 {
  "_meta": {
-  "fetched_at": "20261001",
+  "fetched_at": "20261002",
   "first_seen": "20260921"
  },
- "author_line": "",
- "authors": [],
+ "author_line": "ネットスクール桑原知之／著・編集",
+ "authors": [
+  {
+   "name": "ネットスクール 桑原 知之",
+   "role": "著"
+  }
+ ],
  "ccode": "1034",
  "cover": "https://cover.openbd.jp/9784781014920.jpg",
  "description": "",
  "isbn": "9784781014920",
- "pages": 0,
+ "pages": 428,
  "price": 2700,
  "pubdate": "20261022",
  "publisher": "ネットスクール出版",
