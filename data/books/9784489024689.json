@@ -1,0 +1,30 @@
+{
+ "_meta": {
+  "fetched_at": "20261010",
+  "first_seen": "20261010"
+ },
+ "author_line": "内田治／著 平野綾子／著",
+ "authors": [
+  {
+   "name": "内田治",
+   "role": "著"
+  },
+  {
+   "name": "平野綾子",
+   "role": "著"
+  }
+ ],
+ "ccode": "",
+ "cover": "",
+ "description": "",
+ "isbn": "9784489024689",
+ "pages": 285,
+ "price": 3200,
+ "pubdate": "202612",
+ "publisher": "東京図書",
+ "series": "",
+ "subtitle": "統計の基礎から多変量解析まで",
+ "title": "JMPによるデータ分析",
+ "toc": "",
+ "volume": ""
+}
