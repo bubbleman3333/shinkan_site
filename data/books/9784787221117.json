@@ -1,20 +1,20 @@
 {
  "_meta": {
-  "fetched_at": "20261011",
+  "fetched_at": "20261012",
   "first_seen": "20261010"
  },
- "author_line": "大出春江／著 田間泰子／著 松岡悦子／著",
+ "author_line": "大出春江／著 松岡悦子／著 田間泰子／著",
  "authors": [
   {
    "name": "大出 春江",
    "role": "著"
   },
   {
-   "name": "田間 泰子",
+   "name": "松岡 悦子",
    "role": "著"
   },
   {
-   "name": "松岡 悦子",
+   "name": "田間 泰子",
    "role": "著"
   }
  ],
