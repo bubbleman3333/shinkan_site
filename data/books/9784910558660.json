@@ -1,0 +1,26 @@
+{
+ "_meta": {
+  "fetched_at": "20261023",
+  "first_seen": "20261023"
+ },
+ "author_line": "植木,一也",
+ "authors": [
+  {
+   "name": "植木 一也",
+   "role": ""
+  }
+ ],
+ "ccode": "",
+ "cover": "",
+ "description": "",
+ "isbn": "9784910558660",
+ "pages": 0,
+ "price": 4000,
+ "pubdate": "202610",
+ "publisher": "科学情報出版",
+ "series": "エンジニア入門シリーズ",
+ "subtitle": "",
+ "title": "Pythonで学ぶ動画解析実践入門 : OpenCV・YOLO・CLIP・動画生成まで",
+ "toc": "",
+ "volume": ""
+}
