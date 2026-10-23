@@ -1,12 +1,16 @@
 {
  "_meta": {
-  "fetched_at": "20261023",
+  "fetched_at": "20261024",
   "first_seen": "20261017"
  },
- "author_line": "杉原米和／編",
+ "author_line": "加能作次郎／著 杉原米和／編",
  "authors": [
   {
-   "name": "杉原米和",
+   "name": "加能 作次郎",
+   "role": "著"
+  },
+  {
+   "name": "杉原 米和",
    "role": "編"
   }
  ],
