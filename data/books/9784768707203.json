@@ -1,0 +1,30 @@
+{
+ "_meta": {
+  "fetched_at": "20261121",
+  "first_seen": "20261121"
+ },
+ "author_line": "K.イエーニヒ／著 永田雅嗣／翻訳",
+ "authors": [
+  {
+   "name": "K.イエーニヒ",
+   "role": "著"
+  },
+  {
+   "name": "永田雅嗣",
+   "role": "訳"
+  }
+ ],
+ "ccode": "",
+ "cover": "",
+ "description": "",
+ "isbn": "9784768707203",
+ "pages": 298,
+ "price": 3800,
+ "pubdate": "202611",
+ "publisher": "現代数学社",
+ "series": "",
+ "subtitle": "基礎から固有値・標準形まで",
+ "title": "要点と詳解で学ぶ2層の線形代数",
+ "toc": "",
+ "volume": ""
+}
